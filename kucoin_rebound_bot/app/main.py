@@ -6,7 +6,7 @@ from kucoin_client import get_top_usdt_symbols, get_klines
 from features import df_from_candles
 from rules import all_four_confirm
 
-APP_VERSION = "0.1.10"
+APP_VERSION = "0.1.11"
 
 import os as _os
 import os

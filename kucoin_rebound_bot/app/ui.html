@@ -65,7 +65,7 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
 
   <div class="card section">
     <h2>Status</h2>
-    <pre id="out" class="muted">Loading…</pre>
+    <pre id="statusBox" class="muted">Loading…</pre>
   </div>
 </div>
 <script>
@@ -76,7 +76,7 @@ async function load(){
     if(el){ el.value = String(p[k]); }
   }
   const st = await fetch('./status').then(r=>r.json());
-  document.getElementById('out').textContent = JSON.stringify(st, null, 2);
+  renderStatus(st);
 }
 async function save(){
   const fields = ['macd_fast','macd_slow','macd_signal','macd_hist_contract_bars','ema_fast','ema_mid','ema_body_max_atr_mult','rsi_length','rsi_oversold','rsi_confirm_15m','vol_lookback','vol_boost_mult','green_share_lookback','green_share_min','tp1_pct','tp2_pct','tp3_pct'];
@@ -92,7 +92,38 @@ async function save(){
   if(r.ok){ await load(); }
   else { alert('Save error: ' + (r.error||'unknown')); }
 }
-async function ping(){ const r=await fetch('./ping',{method:'POST'}).then(r=>r.json()); document.getElementById('out').textContent=JSON.stringify(r,null,2); }
+async function ping(){ const r=await fetch('./ping',{method:'POST'}).then(r=>r.json()); renderStatus(await fetch('./status').then(r=>r.json())); }
 load();
+</script>
+
+<script>
+function fmtUptime(sec){
+  sec = Math.max(0, parseInt(sec||0));
+  const d = Math.floor(sec/86400);
+  sec -= d*86400;
+  const h = Math.floor(sec/3600);
+  sec -= h*3600;
+  const m = Math.floor(sec/60);
+  const s = sec - m*60;
+  let out = [];
+  if(d) out.push(d+'d');
+  if(h) out.push(h+'h');
+  if(m) out.push(m+'m');
+  out.push(s+'s');
+  return out.join(' ');
+}
+function renderStatus(st){
+  const el = document.getElementById('statusBox');
+  if(!st || !el){ return; }
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:220px 1fr;gap:6px;line-height:1.6">
+      <div class="muted">Version</div><div><b>${st.version||'-'}</b></div>
+      <div class="muted">Uptime</div><div>${fmtUptime(st.uptime_s||0)}</div>
+      <div class="muted">Quote asset</div><div>${st.quote||'-'}</div>
+      <div class="muted">Top N by volume</div><div>${st.top_n_by_volume||'-'}</div>
+      <div class="muted">Cooldown</div><div>${st.cooldown_minutes||0} min</div>
+      <div class="muted">Scans</div><div>${st.scans||0}</div>
+    </div>`;
+}
 </script>
 </body></html>
