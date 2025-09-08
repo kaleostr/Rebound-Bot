@@ -2,28 +2,97 @@
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Rebound Bot</title>
 <style>
-:root{--bg:#0f1115;--card:#171a22;--text:#e7eaf0;--muted:#9aa3b2;--acc:#2d5bff}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,Inter,Segoe UI,Roboto}
-.wrap{max-width:880px;margin:40px auto;padding:0 16px}
-.card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+:root{--bg:#0f1115;--card:#171a22;--text:#e7eaf0;--muted:#9aa3b2;--acc:#2d5bff;--line:#2a3040}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,Inter,Segoe UI,Roboto}
+.wrap{max-width:960px;margin:40px auto;padding:0 16px}
+.card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.25);margin-bottom:16px}
 h1{margin:0 0 16px} .muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+input[type=number]{width:100%;padding:8px;border:1px solid var(--line);border-radius:10px;background:#0c0e13;color:var(--text)}
+.switch{display:flex;align-items:center;gap:10px}
 .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--acc);color:#fff;border:0;cursor:pointer;margin-right:8px}
-pre{white-space:pre-wrap}
+hr{border:none;border-top:1px solid var(--line);margin:12px 0}
+.section h2{margin:0 0 10px;font-size:16px}
 </style>
 </head><body>
 <div class="wrap">
   <h1>KuCoin Rebound Bot</h1>
-  <div class="card">
-    <div>
-      <button class="btn" onclick="status()">Status</button>
+
+  <div class="card section">
+    <h2>Basics</h2>
+    <div class="muted">Strict 4/4 confirmations. Use /status and /ping in Telegram.</div>
+    <div style="margin-top:8px">
+      <button class="btn" onclick="save()">Save & Apply</button>
       <button class="btn" onclick="ping()">/ping → TG</button>
+      <button class="btn" onclick="load()">Refresh</button>
     </div>
-    <pre id="out" style="margin-top:12px" class="muted">Loading...</pre>
+  </div>
+
+  <div class="card section">
+    <h2>Indicators</h2>
+    <div class="grid">
+      <div><label>MACD fast</label><input id="macd_fast" type="number" step="1" min="1"></div>
+      <div><label>MACD slow</label><input id="macd_slow" type="number" step="1" min="2"></div>
+      <div><label>MACD signal</label><input id="macd_signal" type="number" step="1" min="1"></div>
+      <div><label>MACD contract bars</label><input id="macd_hist_contract_bars" type="number" step="1" min="1"></div>
+
+      <div><label>EMA fast (EMA5)</label><input id="ema_fast" type="number" step="1" min="2"></div>
+      <div><label>EMA mid (EMA10)</label><input id="ema_mid" type="number" step="1" min="3"></div>
+      <div><label>Max body × ATR</label><input id="ema_body_max_atr_mult" type="number" step="0.1" min="0.5"></div>
+      <div></div>
+
+      <div><label>RSI length</label><input id="rsi_length" type="number" step="1" min="2"></div>
+      <div><label>RSI oversold</label><input id="rsi_oversold" type="number" step="1" min="10" max="40"></div>
+      <div><label>Confirm on 15m (0/1)</label><input id="rsi_confirm_15m" type="number" step="1" min="0" max="1"></div>
+      <div></div>
+
+      <div><label>Volume lookback</label><input id="vol_lookback" type="number" step="1" min="5"></div>
+      <div><label>Volume boost ×</label><input id="vol_boost_mult" type="number" step="0.1" min="1.0"></div>
+      <div><label>Green share lookback</label><input id="green_share_lookback" type="number" step="1" min="5"></div>
+      <div><label>Green share min (0..1)</label><input id="green_share_min" type="number" step="0.05" min="0" max="1"></div>
+    </div>
+  </div>
+
+  <div class="card section">
+    <h2>Exits</h2>
+    <div class="grid">
+      <div><label>TP1 (%)</label><input id="tp1_pct" type="number" step="0.001" min="0.001"></div>
+      <div><label>TP2 (%)</label><input id="tp2_pct" type="number" step="0.001" min="0.001"></div>
+      <div><label>TP3 (%)</label><input id="tp3_pct" type="number" step="0.001" min="0.001"></div>
+    </div>
+  </div>
+
+  <div class="card section">
+    <h2>Status</h2>
+    <pre id="out" class="muted">Loading…</pre>
   </div>
 </div>
 <script>
-async function status(){ const r=await fetch('/api/status').then(r=>r.json()); document.getElementById('out').textContent=JSON.stringify(r,null,2); }
+async function load(){
+  const p = await fetch('/api/get_config').then(r=>r.json());
+  for (const k in p){
+    const el = document.getElementById(k);
+    if(el){ el.value = String(p[k]); }
+  }
+  const st = await fetch('/api/status').then(r=>r.json());
+  document.getElementById('out').textContent = JSON.stringify(st, null, 2);
+}
+async function save(){
+  const fields = ['macd_fast','macd_slow','macd_signal','macd_hist_contract_bars','ema_fast','ema_mid','ema_body_max_atr_mult','rsi_length','rsi_oversold','rsi_confirm_15m','vol_lookback','vol_boost_mult','green_share_lookback','green_share_min','tp1_pct','tp2_pct','tp3_pct'];
+  const data = {};
+  for (const k of fields){
+    const el = document.getElementById(k);
+    if(!el) continue;
+    const val = el.value;
+    data[k] = (k.includes('_pct') || k.includes('mult') || k.includes('min') || k.includes('atr')) ? parseFloat(val) : parseInt(val);
+    if (k==='rsi_confirm_15m') data[k] = Boolean(parseInt(val||'0'));
+  }
+  const r = await fetch('/api/set_config', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)}).then(r=>r.json());
+  if(r.ok){ await load(); }
+  else { alert('Save error: ' + (r.error||'unknown')); }
+}
 async function ping(){ const r=await fetch('/api/ping',{method:'POST'}).then(r=>r.json()); document.getElementById('out').textContent=JSON.stringify(r,null,2); }
-status();
+load();
 </script>
 </body></html>
