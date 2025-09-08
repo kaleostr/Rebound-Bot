@@ -1,6 +1,6 @@
 {
   "name": "KuCoin Rebound Signal Bot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "slug": "kucoin_rebound_bot",
   "description": "KuCoin spot rebound scanner: MACD, EMA5/10, RSI, Volume (strict 4/4 signals).",
   "arch": [
@@ -29,9 +29,9 @@
     "top_n_by_volume": "int"
   },
   "ingress": false,
-  "webui": "http://[HOST]:[PORT:8080]",
+  "webui": "http://[HOST]:[PORT:8090]",
   "ports": {
-    "8080/tcp": 8080
+    "8090/tcp": 8090
   },
   "map": [
     "share:rw",
