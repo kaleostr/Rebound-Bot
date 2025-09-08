@@ -7,22 +7,23 @@ body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,Int
 .wrap{max-width:880px;margin:40px auto;padding:0 16px}
 .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
 h1{margin:0 0 16px} .muted{color:var(--muted)}
-.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--acc);color:#fff;border:0;cursor:pointer}
+.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--acc);color:#fff;border:0;cursor:pointer;margin-right:8px}
+pre{white-space:pre-wrap}
 </style>
 </head><body>
 <div class="wrap">
   <h1>KuCoin Rebound Bot</h1>
   <div class="card">
-    <p class="muted">Web UI placeholder. The bot will use strict 4/4 confirmations (MACD, EMA5→EMA10, RSI exit oversold, Volume rise).</p>
-    <button class="btn" onclick="ping()">Refresh</button>
-    <pre id="out" style="white-space:pre-wrap;margin-top:12px"></pre>
+    <div>
+      <button class="btn" onclick="status()">Status</button>
+      <button class="btn" onclick="ping()">/ping</button>
+    </div>
+    <pre id="out" style="margin-top:12px" class="muted">Loading...</pre>
   </div>
 </div>
 <script>
-async function ping(){
-  const r = await fetch('/health').then(r=>r.json());
-  document.getElementById('out').textContent = JSON.stringify(r,null,2);
-}
-ping();
+async function status(){ const r=await fetch('/api/status').then(r=>r.json()); document.getElementById('out').textContent=JSON.stringify(r,null,2); }
+async function ping(){ const r=await fetch('/api/ping',{method:'POST'}).then(r=>r.json()); document.getElementById('out').textContent=JSON.stringify(r,null,2); }
+status();
 </script>
 </body></html>
