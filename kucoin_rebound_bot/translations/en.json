@@ -1,31 +1,14 @@
 {
-  "name": "KuCoin Rebound Signal Bot",
-  "description": "Scans KuCoin spot for rebound opportunities (MACD, EMA5/10, RSI, Volume). Signals only if 4/4 confirmed.",
   "configuration": {
+    "title": "KuCoin Rebound Signal Bot",
     "options": {
-      "telegram_token": {
-        "name": "Telegram Token",
-        "description": "BotFather token"
-      },
-      "telegram_chat_id": {
-        "name": "Telegram Chat ID",
-        "description": "Target chat ID"
-      },
-      "min_vol_24h_usd": {
-        "name": "24h Volume Min (USDT)"
-      },
-      "cooldown_minutes": {
-        "name": "Cooldown (minutes)"
-      },
-      "timezone": {
-        "name": "Timezone"
-      },
-      "symbols_quote": {
-        "name": "Quote Asset"
-      },
-      "top_n_by_volume": {
-        "name": "Top N by volume"
-      }
+      "telegram_token": "Telegram Token",
+      "telegram_chat_id": "Telegram Chat ID",
+      "min_vol_24h_usd": "24h Volume Min (USD)",
+      "cooldown_minutes": "Cooldown (minutes)",
+      "symbols_quote": "Quote Asset",
+      "top_n_by_volume": "Top coins by volume",
+      "timezone": "Timezone"
     }
   }
 }

@@ -1,13 +1,14 @@
 {
   "name": "KuCoin Rebound Signal Bot",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "slug": "kucoin_rebound_bot",
-  "description": "KuCoin spot rebound scanner: MACD, EMA5/10, RSI, Volume (strict 4/4 signals).",
+  "description": "Scans KuCoin spot for rebound opportunities (MACD, EMA5/10, RSI, Volume — strict 4/4). Telegram alerts.",
   "arch": [
     "aarch64",
-    "amd64"
+    "amd64",
+    "armv7"
   ],
-  "startup": "services",
+  "startup": "application",
   "boot": "auto",
   "init": false,
   "options": {
@@ -15,24 +16,26 @@
     "telegram_chat_id": "",
     "min_vol_24h_usd": 5000000,
     "cooldown_minutes": 20,
-    "timezone": "Asia/Seoul",
     "symbols_quote": "USDT",
-    "top_n_by_volume": 120
+    "top_n_by_volume": 120,
+    "timezone": "Asia/Seoul"
   },
   "schema": {
     "telegram_token": "str",
     "telegram_chat_id": "str",
-    "min_vol_24h_usd": "int",
-    "cooldown_minutes": "int",
-    "timezone": "str",
-    "symbols_quote": "str",
-    "top_n_by_volume": "int"
+    "min_vol_24h_usd": "int(0,1000000000)",
+    "cooldown_minutes": "int(1,180)",
+    "symbols_quote": "str?",
+    "top_n_by_volume": "int(10,400)",
+    "timezone": "str?"
   },
   "ingress": true,
   "map": [
-    "share:rw",
     "data:rw"
   ],
   "privileged": [],
-  "ingress_port": 8099
+  "ingress_port": 8099,
+  "homeassistant": "2024.6.0",
+  "stdin": true,
+  "panel_title": "KuCoin Rebound Signal Bot"
 }

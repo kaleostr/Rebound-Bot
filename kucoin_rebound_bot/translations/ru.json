@@ -1,29 +1,14 @@
 {
-  "name": "KuCoin Rebound Signal Bot",
-  "description": "Сканер спота KuCoin для отскоков (MACD, EMA5/10, RSI, Объём). Сигнал только при 4/4 подтверждениях.",
   "configuration": {
+    "title": "KuCoin Rebound Signal Bot",
     "options": {
-      "telegram_token": {
-        "name": "Telegram токен"
-      },
-      "telegram_chat_id": {
-        "name": "Telegram чат ID"
-      },
-      "min_vol_24h_usd": {
-        "name": "Мин. объём за 24ч (USDT)"
-      },
-      "cooldown_minutes": {
-        "name": "Кулдаун (мин)"
-      },
-      "timezone": {
-        "name": "Часовой пояс"
-      },
-      "symbols_quote": {
-        "name": "Котируемая валюта"
-      },
-      "top_n_by_volume": {
-        "name": "Топ монет по объёму"
-      }
+      "telegram_token": "Telegram токен",
+      "telegram_chat_id": "Telegram чат ID",
+      "min_vol_24h_usd": "Мин. объём за 24ч (USD)",
+      "cooldown_minutes": "Кулдаун (минуты)",
+      "symbols_quote": "Котируемая валюта",
+      "top_n_by_volume": "Топ монет по объёму",
+      "timezone": "Часовой пояс"
     }
   }
 }
