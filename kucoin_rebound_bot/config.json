@@ -1,6 +1,6 @@
 {
   "name": "KuCoin Rebound Signal Bot",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "slug": "kucoin_rebound_bot",
   "description": "KuCoin spot rebound scanner: MACD, EMA5/10, RSI, Volume (strict 4/4 signals).",
   "arch": [

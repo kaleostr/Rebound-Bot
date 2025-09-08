@@ -1,9 +1,9 @@
-import httpx, asyncio
+import httpx
 
 class TelegramNotifier:
-    def __init__(self, token: str, chat_id: str):
-        self.token = (token or "").strip()
-        self.chat_id = (chat_id or "").strip()
+    def __init__(self, token: str, chat_id: str|int|None):
+        self.token = (str(token or "")).strip()
+        self.chat_id = str(chat_id or "").strip()
 
     def ready(self) -> bool:
         return bool(self.token and self.chat_id)
