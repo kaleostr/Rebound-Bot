@@ -10,7 +10,7 @@ APP_VERSION = "0.1.5"
 
 import os as _os
 import os
-app = FastAPI(title="KuCoin Rebound Bot", root_path=os.environ.get("INGRESS_ENTRY","")))
+app = FastAPI(title="KuCoin Rebound Bot", root_path=os.environ.get("INGRESS_ENTRY",""))
 START_TS = time.time()
 STATE = {"last_signal_ts": {}, "scans": 0}
 
