@@ -11,6 +11,19 @@ APP_VERSION = "0.1.5"
 import os as _os
 import os
 app = FastAPI(title="KuCoin Rebound Bot", root_path=os.environ.get("INGRESS_ENTRY",""))
+
+# Simple request log
+from starlette.responses import Response
+
+@app.middleware("http")
+async def log_mw(request, call_next):
+    try:
+        resp = await call_next(request)
+        return resp
+    except Exception as e:
+        print("[http] error", request.url.path, e)
+        return Response("Error", status_code=500)
+
 START_TS = time.time()
 STATE = {"last_signal_ts": {}, "scans": 0}
 
@@ -164,7 +177,7 @@ def health():
     p = _merged_params()
     return {"ok": True, "version": APP_VERSION, "uptime_s": int(time.time()-START_TS), "has_tg": bool(o.get("telegram_token") and o.get("telegram_chat_id")), "scans": STATE["scans"], "params": p}
 
-@app.get("/api/status")
+@app.get("/status")
 def api_status():
     o = _merged_options()
     status = {
@@ -177,11 +190,11 @@ def api_status():
     }
     return status
 
-@app.get("/api/get_config")
+@app.get("/get_config")
 def api_get_config():
     return _merged_params()
 
-@app.post("/api/set_config")
+@app.post("/set_config")
 async def api_set_config(req: Request):
     data = await req.json()
     # persist to /data/user_config.json
@@ -194,7 +207,7 @@ async def api_set_config(req: Request):
         return {"ok": False, "error": str(e)}
     return {"ok": True}
 
-@app.post("/api/ping")
+@app.post("/ping")
 async def api_ping():
     ok = await tg_send("pong")
     return {"ok": ok}

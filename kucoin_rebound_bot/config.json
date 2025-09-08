@@ -1,6 +1,6 @@
 {
   "name": "KuCoin Rebound Signal Bot",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "slug": "kucoin_rebound_bot",
   "description": "Scans KuCoin spot for rebound opportunities (MACD, EMA5/10, RSI, Volume — strict 4/4). Telegram alerts.",
   "arch": [

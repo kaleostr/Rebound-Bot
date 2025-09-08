@@ -70,12 +70,12 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
 </div>
 <script>
 async function load(){
-  const p = await fetch('/api/get_config').then(r=>r.json());
+  const p = await fetch('./get_config').then(r=>r.json());
   for (const k in p){
     const el = document.getElementById(k);
     if(el){ el.value = String(p[k]); }
   }
-  const st = await fetch('/api/status').then(r=>r.json());
+  const st = await fetch('./status').then(r=>r.json());
   document.getElementById('out').textContent = JSON.stringify(st, null, 2);
 }
 async function save(){
@@ -88,11 +88,11 @@ async function save(){
     data[k] = (k.includes('_pct') || k.includes('mult') || k.includes('min') || k.includes('atr')) ? parseFloat(val) : parseInt(val);
     if (k==='rsi_confirm_15m') data[k] = Boolean(parseInt(val||'0'));
   }
-  const r = await fetch('/api/set_config', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)}).then(r=>r.json());
+  const r = await fetch('./set_config', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)}).then(r=>r.json());
   if(r.ok){ await load(); }
   else { alert('Save error: ' + (r.error||'unknown')); }
 }
-async function ping(){ const r=await fetch('/api/ping',{method:'POST'}).then(r=>r.json()); document.getElementById('out').textContent=JSON.stringify(r,null,2); }
+async function ping(){ const r=await fetch('./ping',{method:'POST'}).then(r=>r.json()); document.getElementById('out').textContent=JSON.stringify(r,null,2); }
 load();
 </script>
 </body></html>
