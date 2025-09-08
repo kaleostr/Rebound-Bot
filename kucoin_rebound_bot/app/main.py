@@ -8,7 +8,8 @@ from rules import all_four_confirm
 
 APP_VERSION = "0.1.5"
 
-app = FastAPI(title="KuCoin Rebound Bot")
+import os as _os
+app = FastAPI(title="KuCoin Rebound Bot", root_path=_os.environ.get("INGRESS_ENTRY",""))
 START_TS = time.time()
 STATE = {"last_signal_ts": {}, "scans": 0}
 
