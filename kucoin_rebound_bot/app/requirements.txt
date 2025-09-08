@@ -1,0 +1,7 @@
+httpx
+pandas
+numpy
+ta
+fastapi
+uvicorn
+pyyaml
