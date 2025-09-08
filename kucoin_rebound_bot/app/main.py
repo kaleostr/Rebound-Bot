@@ -6,7 +6,7 @@ from kucoin_client import get_top_usdt_symbols, get_klines
 from features import df_from_candles
 from rules import all_four_confirm
 
-APP_VERSION = "0.1.5"
+APP_VERSION = "0.1.10"
 
 import os as _os
 import os
@@ -214,6 +214,6 @@ async def api_ping():
 
 @app.on_event("startup")
 async def on_start():
-    await tg_send(f"✅ KuCoin Rebound Bot started (v{APP_VERSION})")
+    await tg_send(f"✅ KuCoin Rebound Bot \nVersion: v{APP_VERSION}")
     asyncio.create_task(tg_long_poll())
     asyncio.create_task(scanner_loop())
